@@ -12,9 +12,26 @@ jobs:
       contents: write
     name: Run PR Agent on every pull request, respond to user comments
     steps:
+      # Step 1: Run PR Agent to perform code review
       - name: PR Agent action step
         id: pragent
         uses: Codium-ai/pr-agent@main
         env:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 2: Generate Unit Tests using Codium.ai
+      - name: Generate Unit Tests with Codium.ai
+        run: |
+          npx codium-ai /test  # This generates unit tests for the code
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 3: Optionally, install dependencies if needed (e.g., Jest)
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run Jest tests to execute generated unit tests
+      - name: Run Jest tests
+        run: npm test
