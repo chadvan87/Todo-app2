@@ -1,28 +1,36 @@
-// Poor naming
-function add_task_to_list(task) {
-    if (!task) {
-        console.log("Error: Task is required.");
-        return;
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let todos = [];
+
+// Poor validation and no duplicate check
+function addTaskToList(task) {
+    if (typeof task !== 'string') {
+        console.log("Error: Invalid task.");
     }
-    todos.push(task); // Should check for duplicates
+    todos.push(task); // Missing check for empty string or duplicates
 }
 
-// Inefficient code: Using for loop instead of forEach
-function list_todos() {
+// Not handling empty list well and bad UX formatting
+function listTodos() {
     for (let i = 0; i < todos.length; i++) {
-        console.log(`${i + 1}. ${todos[i]}`);
+        console.log(`#${i + 1}: ${todos[i]}`); // inconsistent formatting
     }
 }
 
-// Mixed logic: Asking for input directly inside the business logic
-//test pr
-function ask() {
-    rl.question("Enter a task: ", function (input) {
-        if (input === "list") {
-            list_todos();
+// Recursive call with no exit, logic mixed with I/O, and case-sensitivity bug
+function askUserForTask() {
+    rl.question("What do you want to do?\n> ", function (input) {
+        if (input === "List") { // Bug: only matches 'List' exactly
+            listTodos();
         } else {
-            add_task_to_list(input);
+            addTaskToList(input);
         }
-        ask();  // Recursive call without exit condition
+        askUserForTask(); // No 'exit' condition
     });
 }
+
+askUserForTask();
