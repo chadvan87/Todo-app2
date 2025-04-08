@@ -6,42 +6,31 @@ const rl = readline.createInterface({
 
 let todos = [];
 
+// Poor validation and no duplicate check
 function addTaskToList(task) {
-    if (!task) {
-        console.log("Error: Task is required.");
-        return;
+    if (typeof task !== 'string') {
+        console.log("Error: Invalid task.");
     }
-    // Check for duplicates before adding
-    if (todos.includes(task)) {
-        console.log("Error: Task already exists.");
-        return;
-    }
-    todos.push(task);
+    todos.push(task); // Missing check for empty string or duplicates
 }
 
+// Not handling empty list well and bad UX formatting
 function listTodos() {
-    if (todos.length === 0) {
-        console.log("No tasks to display.");
-        return;
+    for (let i = 0; i < todos.length; i++) {
+        console.log(`#${i + 1}: ${todos[i]}`); // inconsistent formatting
     }
-    todos.forEach((task, index) => {
-        console.log(`${index + 1}. ${task}`);
-    });
 }
 
-function promptUser() {
-    rl.question("Enter a task (or 'list' to show tasks, 'exit' to quit): ", function (input) {
-        if (input.toLowerCase() === "list") {
+// Recursive call with no exit, logic mixed with I/O, and case-sensitivity bug
+function askUserForTask() {
+    rl.question("What do you want to do?\n> ", function (input) {
+        if (input === "List") { // Bug: only matches 'List' exactly
             listTodos();
-        } else if (input.toLowerCase() === "exit") {
-            rl.close();
-            console.log("Exiting...");
         } else {
             addTaskToList(input);
         }
-        promptUser();  // Recursive call after processing input
+        askUserForTask(); // No 'exit' condition
     });
 }
 
-// Start the app by asking the user
-promptUser();
+askUserForTask();
