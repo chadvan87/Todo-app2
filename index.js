@@ -11,13 +11,10 @@ function addTaskToList(task) {
         console.log("Error: Task is required.");
         return;
     }
-    // Check for duplicates before adding
-    if (todos.includes(task)) {
-        console.log("Error: Task already exists.");
-        return;
-    }
+    // Mistake: Not checking for duplicates (delete the previous duplicate check)
     todos.push(task);
 }
+
 
 function listTodos() {
     if (todos.length === 0) {
