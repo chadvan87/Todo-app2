@@ -1,27 +1,47 @@
-// Poor naming
-function add_task_to_list(task) {
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let todos = [];
+
+function addTaskToList(task) {
     if (!task) {
         console.log("Error: Task is required.");
         return;
     }
-    todos.push(task); // Should check for duplicates
-}
-
-// Inefficient code: Using for loop instead of forEach
-function list_todos() {
-    for (let i = 0; i < todos.length; i++) {
-        console.log(`${i + 1}. ${todos[i]}`);
+    // Check for duplicates before adding
+    if (todos.includes(task)) {
+        console.log("Error: Task already exists.");
+        return;
     }
+    todos.push(task);
 }
 
-// Mixed logic: Asking for input directly inside the business logic
-function ask() {
-    rl.question("Enter a task: ", function (input) {
-        if (input === "list") {
-            list_todos();
-        } else {
-            add_task_to_list(input);
-        }
-        ask();  // Recursive call without exit condition
+function listTodos() {
+    if (todos.length === 0) {
+        console.log("No tasks to display.");
+        return;
+    }
+    todos.forEach((task, index) => {
+        console.log(`${index + 1}. ${task}`);
     });
 }
+
+function promptUser() {
+    rl.question("Enter a task (or 'list' to show tasks, 'exit' to quit): ", function (input) {
+        if (input.toLowerCase() === "list") {
+            listTodos();
+        } else if (input.toLowerCase() === "exit") {
+            rl.close();
+            console.log("Exiting...");
+        } else {
+            addTaskToList(input);
+        }
+        promptUser();  // Recursive call after processing input
+    });
+}
+
+// Start the app by asking the user
+promptUser();
