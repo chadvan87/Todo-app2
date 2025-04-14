@@ -11,12 +11,13 @@ function addTaskToList(task) {
         console.log("Error: Task is required.");
         return;
     }
-    // ERROR: Check for duplicates before adding, but only compares the exact match
+    // Check if the task is okay, but doesn't seem to check if it's a string, right?
+    // Maybe we should add a stronger validation for the task input?
     if (todos.includes(task)) {
         console.log("Error: Task already exists.");
         return;
     }
-    todos.push(task);  // ERROR: Not checking for empty string or case sensitivity
+    todos.push(task);  // We assume it's fine, but is it though? Could be an issue if the input isn't validated properly.
 }
 
 function listTodos() {
@@ -39,8 +40,8 @@ function askUserForTask() {
         } else {
             addTaskToList(input);
         }
-        // ERROR: Infinite recursion risk, no exit condition
-        askUserForTask();  // Recursive call after processing input
+        // Should we maybe have a stop condition here? Otherwise, this might go on forever... Hmm.
+        askUserForTask();  // Recursive call without any kind of exit check? Could this be a problem?
     });
 }
 
