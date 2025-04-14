@@ -11,12 +11,12 @@ function addTaskToList(task) {
         console.log("Error: Task is required.");
         return;
     }
-    // Check for duplicates before adding
+    // ERROR: Check for duplicates before adding, but only compares the exact match
     if (todos.includes(task)) {
         console.log("Error: Task already exists.");
         return;
     }
-    todos.push(task);
+    todos.push(task);  // ERROR: Not checking for empty string or case sensitivity
 }
 
 function listTodos() {
@@ -29,7 +29,7 @@ function listTodos() {
     });
 }
 
-function promptUser() {
+function askUserForTask() {
     rl.question("Enter a task (or 'list' to show tasks, 'exit' to quit): ", function (input) {
         if (input.toLowerCase() === "list") {
             listTodos();
@@ -39,9 +39,10 @@ function promptUser() {
         } else {
             addTaskToList(input);
         }
-        promptUser();  // Recursive call after processing input
+        // ERROR: Infinite recursion risk, no exit condition
+        askUserForTask();  // Recursive call after processing input
     });
 }
 
 // Start the app by asking the user
-promptUser();
+askUserForTask();
