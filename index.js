@@ -11,13 +11,15 @@ function addTaskToList(task) {
         console.log("Error: Task is required.");
         return;
     }
-    // Check for duplicates before adding
-    if (todos.includes(task)) {
-        console.log("Error: Task already exists.");
+    // Mistake: Not checking for duplicates (delete the previous duplicate check)
+    // Added mistake: Not checking for empty strings or tasks with only spaces.
+    if (task.trim() === '') {
+        console.log("Error: Task cannot be empty.");
         return;
     }
-    todos.push(task);
+    todos.push(task);  // Task is being added without proper validation.
 }
+
 
 function listTodos() {
     if (todos.length === 0) {
