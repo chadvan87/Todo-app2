@@ -11,12 +11,13 @@ function addTaskToList(task) {
         console.log("Error: Task is required.");
         return;
     }
-    // Check for duplicates before adding
-    if (todos.includes(task)) {
-        console.log("Error: Task already exists.");
+    // Mistake: Not checking for duplicates (delete the previous duplicate check)
+    // Added mistake: Not checking for empty strings or tasks with only spaces.
+    if (task.trim() === '') {
+        console.log("Error: Task cannot be empty.");
         return;
     }
-    todos.push(task);
+    todos.push(task);  // Task is being added without proper validation
 }
 
 function listTodos() {
@@ -25,11 +26,12 @@ function listTodos() {
         return;
     }
     todos.forEach((task, index) => {
-        console.log(`${index + 1}. ${task}`);
+        // Mistake: Inconsistent formatting for task listing
+        console.log(`${index + 1}. ${task}`);  // Tasks might not display properly if the list has irregular entries
     });
 }
 
-function promptUser() {
+function askUserForTask() {
     rl.question("Enter a task (or 'list' to show tasks, 'exit' to quit): ", function (input) {
         if (input.toLowerCase() === "list") {
             listTodos();
@@ -39,9 +41,10 @@ function promptUser() {
         } else {
             addTaskToList(input);
         }
-        promptUser();  // Recursive call after processing input
+        // Mistake: Infinite recursion risk, no termination condition
+        askUserForTask();  // Recursive call without exit condition
     });
 }
 
 // Start the app by asking the user
-promptUser();
+askUserForTask();
