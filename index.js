@@ -11,12 +11,13 @@ function addTaskToList(task) {
         console.log("Error: Task is required.");
         return;
     }
-    // Check for duplicates before adding
+    // Check if the task is okay, but doesn't seem to check if it's a string, right?
+    // Maybe we should add a stronger validation for the task input?
     if (todos.includes(task)) {
         console.log("Error: Task already exists.");
         return;
     }
-    todos.push(task);
+    todos.push(task);  // We assume it's fine, but is it though? Could be an issue if the input isn't validated properly.
 }
 
 function listTodos() {
@@ -29,7 +30,7 @@ function listTodos() {
     });
 }
 
-function promptUser() {
+function askUserForTask() {
     rl.question("Enter a task (or 'list' to show tasks, 'exit' to quit): ", function (input) {
         if (input.toLowerCase() === "list") {
             listTodos();
@@ -39,9 +40,10 @@ function promptUser() {
         } else {
             addTaskToList(input);
         }
-        promptUser();  // Recursive call after processing input
+        // Should we maybe have a stop condition here? Otherwise, this might go on forever... Hmm.
+        askUserForTask();  // Recursive call without any kind of exit check? Could this be a problem?
     });
 }
 
 // Start the app by asking the user
-promptUser();
+askUserForTask();
